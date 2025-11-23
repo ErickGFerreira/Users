@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">users</string>
+    <string name="user_name">Nome</string>
+    <string name="user_email">Email</string>
+    <string name="user_phone">Telefone</string>
+    <string name="user_city">Cidade</string>
+    <string name="serach_placeholder">Procure por nome ou email</string>
+</resources>
