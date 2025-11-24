@@ -15,8 +15,11 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -138,10 +141,10 @@ private fun ScreenContent(
             .background(Neutral58)
     ) {
         TextField(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .background(Neutral100)
-                .windowInsetsPadding(WindowInsets.statusBars)
-            ,
+                .windowInsetsPadding(WindowInsets.statusBars),
             value = query,
             onValueChange = {
                 onActionEvent(UsersListScreenAction.OnSearchTextChangedAction(text = it))
@@ -152,7 +155,7 @@ private fun ScreenContent(
                 )
             },
             leadingIcon = {
-                Image(painter = painterResource(R.drawable.ic_person_search), contentDescription = null)
+                Icon(imageVector = Icons.Default.Search, contentDescription = null)
             }
         )
         Box(

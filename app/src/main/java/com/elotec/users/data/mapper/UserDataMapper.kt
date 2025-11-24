@@ -10,34 +10,34 @@ import com.elotec.users.domain.model.User
 import com.elotec.users.domain.model.UserAddress
 
 object UserDataMapper {
-    fun UserResponse.toUser() =
+    fun UserResponse.toDomain() =
         User(
             id = id,
             name = name,
             username = username,
             email = email,
-            address = address.toUserAddress(),
+            address = address.toDomain(),
             phone = phone,
             website = website,
-            company = company.toCompany()
+            company = company.toDomain()
         )
 
-    fun UserAddressResponse.toUserAddress() =
+    fun UserAddressResponse.toDomain() =
         UserAddress(
             street = street,
             suite = suite,
             city = city,
             zipcode = zipcode,
-            geo = geo.toGeoLocalization()
+            geo = geo.toDomain()
         )
 
-    fun GeolocalizationResponse.toGeoLocalization() =
+    fun GeolocalizationResponse.toDomain() =
         Geolocalization(
             lat = lat,
             lgn = lgn,
         )
 
-    fun CompanyResponse.toCompany() = Company(
+    fun CompanyResponse.toDomain() = Company(
         name = name,
         catchPhrase = catchPhrase,
         bs = bs

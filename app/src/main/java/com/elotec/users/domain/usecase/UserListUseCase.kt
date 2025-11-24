@@ -1,6 +1,7 @@
 package com.elotec.users.domain.usecase
 
 import com.elotec.users.utils.safe.getOrNull
+import com.elotec.users.utils.safe.getOrThrow
 import com.elotec.users.utils.safe.safeRunDispatcher
 import javax.inject.Inject
 
