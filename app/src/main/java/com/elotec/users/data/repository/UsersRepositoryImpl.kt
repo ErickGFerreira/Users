@@ -13,8 +13,13 @@ class UsersRepositoryImpl @Inject constructor(
     private val api: UsersApi,
     private val userDao: UserDao
 ) : UsersRepository {
-    override suspend fun getUserList(): List<User> =
-        api.getUserList().map { user ->
+    override suspend fun getUserList(currentPage: Int): List<User> =
+        api.getUserList(currentPage).map { user ->
+            user.toDomain()
+        }
+
+    override suspend fun getUserListPaginated(page: Int): List<User> =
+        api.getUserList(page).map { user ->
             user.toDomain()
         }
 
@@ -24,7 +29,10 @@ class UsersRepositoryImpl @Inject constructor(
         }
 
     override suspend fun saveUsersToCache(users: List<User>) {
-        userDao.deleteAllUsers()
+        userDao.insertUsers(users = users.map { user -> user.toEntity() })
+    }
+
+    override suspend fun appendUsersToCache(users: List<User>) {
         userDao.insertUsers(users = users.map { user -> user.toEntity() })
     }
 }

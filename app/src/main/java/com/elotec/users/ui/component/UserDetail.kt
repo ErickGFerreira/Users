@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.elotec.users.domain.model.LabelValueData
 import com.elotec.users.ui.color.Neutral69
 import com.elotec.users.ui.dimen.Spacing
+import com.elotec.users.ui.theme.FontStyle
 
 @Composable
 fun UserDetail(
@@ -31,12 +32,12 @@ fun UserDetail(
                 modifier = modifier,
                 label = LabelValueText(
                     text = values[index].label,
-                    textStyle = TextStyle.Default.copy(fontWeight = FontWeight.Bold),
+                    textStyle = FontStyle.bodyMedium,
                     color = Neutral69
                 ),
                 value = LabelValueText(
                     text = values[index].value,
-                    textStyle = TextStyle.Default
+                    textStyle = FontStyle.bodyRegular
                 )
             )
         }

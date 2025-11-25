@@ -10,8 +10,8 @@ class UserListUseCase @Inject constructor(
     private val getRemoteUserListUseCase: GetRemoteUserListUseCase,
     private val saveUserListUseCase: SaveUserListUseCase
 ) {
-    suspend fun execute() = safeRunDispatcher {
-        getRemoteUserListUseCase.execute().getOrNull()
+    suspend fun execute(currentPage: Int = 0) = safeRunDispatcher {
+        getRemoteUserListUseCase.execute(currentPage = currentPage).getOrNull()
             ?.also { users -> saveUserListUseCase.execute(users) }
             ?: getLocalUsersListUseCase.execute().getOrThrow()
     }

@@ -22,6 +22,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults.colors
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -37,6 +39,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.room.util.query
 import com.elotec.users.R
 import com.elotec.users.common.view.ScreenScaffold
 import com.elotec.users.domain.model.LabelValueData
@@ -47,9 +50,12 @@ import com.elotec.users.feature.list.UsersListScreenAction.PaginateAction
 import com.elotec.users.feature.list.UsersListUiEvent.Event.Finish
 import com.elotec.users.ui.color.Neutral100
 import com.elotec.users.ui.color.Neutral58
+import com.elotec.users.ui.component.AppToast
+import com.elotec.users.ui.component.EmptyScreen
 import com.elotec.users.ui.component.ScreenError
 import com.elotec.users.ui.component.SpacerVertical
 import com.elotec.users.ui.component.UserCard
+import com.elotec.users.utils.GENERIC_ERROR
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 
@@ -143,7 +149,6 @@ private fun ScreenContent(
         TextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Neutral100)
                 .windowInsetsPadding(WindowInsets.statusBars),
             value = query,
             onValueChange = {
@@ -156,24 +161,36 @@ private fun ScreenContent(
             },
             leadingIcon = {
                 Icon(imageVector = Icons.Default.Search, contentDescription = null)
-            }
-        )
-        Box(
-            modifier = Modifier
-                .fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            TrackingCardList(
-                presentation = presentation,
-                onActionEvent = onActionEvent,
+            },
+            colors = colors(
+                unfocusedContainerColor = Neutral100,
+                focusedContainerColor = Neutral100
             )
-//            AppToast(
-//                modifier = Modifier.align(Alignment.BottomCenter),
-//                message = presentation.error?.title ?: GENERIC_ERROR,
-//                visible = presentation.errorPagination,
-//                onAction = { onActionEvent(UsersListScreenAction.ErrorPaginationButtonAction) },
-//                onDismiss = { onActionEvent(UsersListScreenAction.OnToastDismissedAction) }
-//            )
+        )
+        PullToRefreshBox(
+            isRefreshing = presentation.isRefreshing,
+            onRefresh = { onActionEvent(UsersListScreenAction.RefreshAction) },
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                TrackingCardList(
+                    presentation = presentation,
+                    onActionEvent = onActionEvent,
+                    query = query,
+                )
+                AppToast(
+                    modifier = Modifier.align(Alignment.BottomCenter),
+                    message = presentation.toastError?.title ?: GENERIC_ERROR,
+                    visible = presentation.errorLoadingMore,
+                    buttonText = stringResource(R.string.try_again),
+                    onAction = { onActionEvent(UsersListScreenAction.ErrorPaginating) },
+                    onDismiss = { onActionEvent(UsersListScreenAction.OnToastDismissedAction) }
+                )
+            }
         }
     }
 }
@@ -181,7 +198,8 @@ private fun ScreenContent(
 @Composable
 private fun TrackingCardList(
     presentation: UsersListUiState.Presentation,
-    onActionEvent: (UsersListScreenAction) -> Unit
+    onActionEvent: (UsersListScreenAction) -> Unit,
+    query: String,
 ) {
     val lazyListState = rememberLazyListState()
 
@@ -194,15 +212,18 @@ private fun TrackingCardList(
         }
     }
 
-    LaunchedEffect(key1 = lazyListState) {
+    LaunchedEffect(key1 = lazyListState, key2 = query) {
         snapshotFlow { shouldPaginate.value }
             .distinctUntilChanged()
-            .filter { it }
+            .filter { it && query.isEmpty() }
             .collect { onActionEvent(PaginateAction) }
     }
-    if (presentation.isPaginating) {
+    if (presentation.users.isEmpty() && query.isNotEmpty()) {
+        EmptyScreen(message = stringResource(R.string.empty_list))
+    } else if (presentation.isPaginating) {
         CircularProgressIndicator()
     }
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize(),

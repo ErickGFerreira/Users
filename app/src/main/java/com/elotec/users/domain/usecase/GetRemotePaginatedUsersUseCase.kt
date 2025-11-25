@@ -3,6 +3,6 @@ package com.elotec.users.domain.usecase
 import com.elotec.users.domain.model.User
 import com.elotec.users.utils.safe.Result
 
-fun interface GetRemoteUserListUseCase {
-    suspend fun execute(currentPage: Int): Result<List<User>>
+fun interface GetRemotePaginatedUsersUseCase {
+    suspend fun execute(page: Int): Result<List<User>>
 }

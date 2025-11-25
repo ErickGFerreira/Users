@@ -13,8 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.elotec.users.R
 import com.elotec.users.domain.model.LabelValueData
@@ -22,6 +20,7 @@ import com.elotec.users.ui.color.Neutral100
 import com.elotec.users.ui.color.Neutral69
 import com.elotec.users.ui.dimen.Size
 import com.elotec.users.ui.dimen.Spacing
+import com.elotec.users.ui.theme.FontStyle
 
 @Composable
 fun UserCard(
@@ -47,23 +46,23 @@ fun UserCard(
                 LabelValue(
                     label = LabelValueText(
                         text = nameInfo.label,
-                        textStyle = TextStyle.Default.copy(fontWeight = FontWeight.Bold),
+                        textStyle = FontStyle.bodyMedium,
                         color = Neutral69
                     ),
                     value = LabelValueText(
                         text = nameInfo.value,
-                        textStyle = TextStyle.Default
+                        textStyle = FontStyle.bodyRegular
                     )
                 )
                 LabelValue(
                     label = LabelValueText(
                         text = cityInfo.label,
-                        textStyle = TextStyle.Default.copy(fontWeight = FontWeight.Bold),
-                        color = Neutral69
+                        textStyle = FontStyle.bodyMedium,
+                        color = Neutral69,
                     ),
                     value = LabelValueText(
                         text = cityInfo.value,
-                        textStyle = TextStyle.Default
+                        textStyle = FontStyle.bodyRegular,
                     )
                 )
             }
@@ -76,12 +75,12 @@ fun UserCard(
                 LabelValue(
                     label = LabelValueText(
                         text = emailInfo.label,
-                        textStyle = TextStyle.Default.copy(fontWeight = FontWeight.Bold),
+                        textStyle = FontStyle.bodyMedium,
                         color = Neutral69
                     ),
                     value = LabelValueText(
                         text = emailInfo.value,
-                        textStyle = TextStyle.Default
+                        textStyle = FontStyle.bodyRegular,
                     )
                 )
                 Image(
