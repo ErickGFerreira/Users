@@ -2,6 +2,9 @@
 
 Aplicativo Android nativo desenvolvido em Kotlin que permite visualizar, buscar e gerenciar uma lista de usuários consumindo dados de uma API REST.
 
+## Tempo estimado de desenvolvimento
+- **26 horas
+  
 ## Funcionalidades
 
 ### Lista de Usuários
