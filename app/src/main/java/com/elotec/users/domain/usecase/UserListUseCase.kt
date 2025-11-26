@@ -5,7 +5,7 @@ import com.elotec.users.utils.safe.getOrThrow
 import com.elotec.users.utils.safe.safeRunDispatcher
 import javax.inject.Inject
 
-class UserListUseCase @Inject constructor(
+class UsersListUseCase @Inject constructor(
     private val getLocalUsersListUseCase: GetLocalUsersListUseCase,
     private val getRemoteUserListUseCase: GetRemoteUserListUseCase,
     private val saveUserListUseCase: SaveUserListUseCase

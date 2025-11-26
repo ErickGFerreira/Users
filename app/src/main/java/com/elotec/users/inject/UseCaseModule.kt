@@ -5,7 +5,7 @@ import com.elotec.users.domain.usecase.GetLocalUsersListUseCase
 import com.elotec.users.domain.usecase.GetRemotePaginatedUsersUseCase
 import com.elotec.users.domain.usecase.GetRemoteUserListUseCase
 import com.elotec.users.domain.usecase.SaveUserListUseCase
-import com.elotec.users.domain.usecase.UserListUseCase
+import com.elotec.users.domain.usecase.UsersListUseCase
 import com.elotec.users.utils.safe.safeRunDispatcher
 import dagger.Module
 import dagger.Provides
@@ -53,7 +53,7 @@ class UseCaseModule {
         getLocalUsersListUseCase: GetLocalUsersListUseCase,
         getRemoteUserListUseCase: GetRemoteUserListUseCase,
         saveUserListUseCase: SaveUserListUseCase
-    ) = UserListUseCase(
+    ) = UsersListUseCase(
         getLocalUsersListUseCase = getLocalUsersListUseCase,
         getRemoteUserListUseCase = getRemoteUserListUseCase,
         saveUserListUseCase = saveUserListUseCase
