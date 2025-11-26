@@ -51,12 +51,12 @@ object UserEntityMapper {
 
     private fun Geolocalization.toEntity(): GeoEntity = GeoEntity(
         lat = lat,
-        lng = lgn
+        lng = lng
     )
 
     private fun GeoEntity.toDomain(): Geolocalization = Geolocalization(
         lat = lat,
-        lgn = lng
+        lng = lng
     )
 
     private fun Company.toEntity(): CompanyEntity = CompanyEntity(

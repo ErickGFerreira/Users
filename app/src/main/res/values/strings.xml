@@ -7,4 +7,21 @@
     <string name="serach_placeholder">Procure por nome ou email</string>
     <string name="try_again">Repetir</string>
     <string name="empty_list">Não há resultados para essa busca\n</string>
+
+    <!-- User Detail Strings -->
+    <string name="user_details_title">Detalhes do Usuário</string>
+    <string name="back_button">Voltar</string>
+    <string name="personal_info">Informações Pessoais</string>
+    <string name="address_info">Endereço</string>
+    <string name="company_info">Empresa</string>
+    <string name="user_username">Usuário</string>
+    <string name="user_website">Website</string>
+    <string name="user_street">Rua</string>
+    <string name="user_suite">Complemento</string>
+    <string name="user_zipcode">CEP</string>
+    <string name="user_geo_lat">Latitude</string>
+    <string name="user_geo_lng">Longitude</string>
+    <string name="company_name">Nome da Empresa</string>
+    <string name="company_catchphrase">Slogan</string>
+    <string name="company_bs">Área de Atuação</string>
 </resources>

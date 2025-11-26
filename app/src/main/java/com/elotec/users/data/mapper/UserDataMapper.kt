@@ -34,7 +34,7 @@ object UserDataMapper {
     fun GeolocalizationResponse.toDomain() =
         Geolocalization(
             lat = lat,
-            lgn = lgn,
+            lng = lng,
         )
 
     fun CompanyResponse.toDomain() = Company(

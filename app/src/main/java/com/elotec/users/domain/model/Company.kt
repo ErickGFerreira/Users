@@ -1,10 +1,13 @@
 package com.elotec.users.domain.model
 
+import com.elotec.users.utils.EMPTY_STRING
+import java.io.Serializable
+
 data class Company(
-    val name: String,
-    val catchPhrase: String,
-    val bs: String,
-) {
+    val name: String = EMPTY_STRING,
+    val catchPhrase: String = EMPTY_STRING,
+    val bs: String = EMPTY_STRING,
+) : Serializable {
     companion object {
         fun mockCompany() = Company(
             name = "Temple Co.",

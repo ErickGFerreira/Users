@@ -1,15 +1,18 @@
 package com.elotec.users.domain.model
 
+import com.elotec.users.utils.EMPTY_STRING
+import java.io.Serializable
+
 data class User(
-    val id: Int,
-    val name: String,
-    val username: String,
-    val email: String,
-    val address: UserAddress,
-    val phone: String,
-    val website: String,
-    val company: Company,
-) {
+    val id: Int = 0,
+    val name: String = EMPTY_STRING,
+    val username: String = EMPTY_STRING,
+    val email: String = EMPTY_STRING,
+    val address: UserAddress = UserAddress(),
+    val phone: String = EMPTY_STRING,
+    val website: String = EMPTY_STRING,
+    val company: Company = Company(),
+) : Serializable {
     companion object {
         fun mockUser() = User(
             id = 1,

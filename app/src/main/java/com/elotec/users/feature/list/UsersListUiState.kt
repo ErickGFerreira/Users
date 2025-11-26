@@ -18,7 +18,13 @@ class UsersListUiState @Inject constructor() {
         userList: List<User>,
     ) {
         screenState.value = ScreenState.ScreenContent
-        setupUserList(userList = userList)
+        setupUserList(userList = userList, isAppending = false)
+    }
+
+    fun appendUsers(
+        userList: List<User>,
+    ) {
+        setupUserList(userList = userList, isAppending = true)
     }
 
     fun showProgress() {
@@ -96,11 +102,16 @@ class UsersListUiState @Inject constructor() {
     }
 
     private fun setupUserList(
-        userList: List<User>
+        userList: List<User>,
+        isAppending: Boolean = false
     ) {
         screenPresentation.update {
             it.copy(
-                users = it.users + userList,
+                users = if (isAppending) {
+                    (it.users + userList).distinctBy { user -> user.id }
+                } else {
+                    userList
+                },
                 isRefreshing = false,
                 isPaginating = false,
                 errorLoadingMore = false,
@@ -109,13 +120,15 @@ class UsersListUiState @Inject constructor() {
         }
 
         val currentQuery = query.value
+        val allUsers = screenPresentation.value.users
+        
         val usersToShow = if (currentQuery.isNotEmpty()) {
-            userList.filter { user ->
+            allUsers.filter { user ->
                 user.name.lowercase().contains(currentQuery.lowercase()) ||
                         user.email.lowercase().contains(currentQuery.lowercase())
             }
         } else {
-            userList
+            allUsers
         }
 
         filteredScreenPresentation.update {

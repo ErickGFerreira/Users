@@ -43,6 +43,7 @@ import androidx.room.util.query
 import com.elotec.users.R
 import com.elotec.users.common.view.ScreenScaffold
 import com.elotec.users.domain.model.LabelValueData
+import com.elotec.users.domain.model.User
 import com.elotec.users.feature.UsersViewModel
 import com.elotec.users.feature.list.UsersListScreenAction.ErrorButtonAction
 import com.elotec.users.feature.list.UsersListScreenAction.ErrorCloseButtonAction
@@ -63,7 +64,7 @@ import kotlinx.coroutines.flow.filter
 fun UsersListScreen(
     viewModel: UsersListViewModel,
     flowData: UsersViewModel.FlowData,
-    navigateToUserDetails: () -> Unit,
+    navigateToUserDetails: (User) -> Unit,
 ) {
     val activity = LocalActivity.current as FragmentActivity
 
@@ -85,12 +86,12 @@ fun UsersListScreen(
 private fun EventConsumer(
     activity: FragmentActivity,
     viewModel: UsersListViewModel,
-    navigateToUsersDetails: () -> Unit,
+    navigateToUsersDetails: (User) -> Unit,
 ) = LaunchedEffect(key1 = Unit) {
     viewModel.uiEvent.collect { event ->
         when (event) {
             Finish -> activity.finish()
-            is UsersListUiEvent.Event.NavigateToUserDetail -> navigateToUsersDetails()
+            is UsersListUiEvent.Event.NavigateToUserDetail -> navigateToUsersDetails(event.user)
         }
     }
 }
@@ -245,8 +246,9 @@ private fun TrackingCardList(
                 ),
                 emailInfo = LabelValueData(
                     label = stringResource(R.string.user_email),
-                    value = user.email
+                    value = user.email,
                 ),
+                onCardClick = { onActionEvent(UsersListScreenAction.OnUserClicked(user = user)) }
             )
             SpacerVertical()
         }

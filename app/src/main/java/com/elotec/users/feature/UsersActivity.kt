@@ -4,13 +4,16 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.Navigation
 import androidx.navigation.compose.composable
 import com.elotec.users.common.navigation.customNavigate
 import com.elotec.users.common.navigation.setNavigationContent
 import com.elotec.users.common.view.BaseComposeActivity
 import com.elotec.users.common.viewmodel.SavedStateViewModelFactory
 import com.elotec.users.feature.UsersUiEvent.Navigation.Finish
+import com.elotec.users.feature.details.UserDetailScreen
 import com.elotec.users.feature.list.UsersListScreen
+import com.elotec.users.ui.component.UserDetail
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -45,7 +48,16 @@ class UsersActivity : BaseComposeActivity<UsersViewModel>() {
                 UsersListScreen(
                     viewModel = composeViewModel(),
                     flowData = flowViewModel.flowData,
-                    navigateToUserDetails = {}
+                    navigateToUserDetails = { user ->
+                        flowViewModel.saveUser(user)
+                        flowViewModel.navigate(navigation = UsersUiEvent.Navigation.UserDetail)
+                    }
+                )
+            }
+            composable(route = UsersUiEvent.Navigation.UserDetail.route) {
+                UserDetailScreen(
+                    viewModel = composeViewModel(),
+                    flowData = flowViewModel.flowData,
                 )
             }
         }

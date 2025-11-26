@@ -3,6 +3,7 @@ package com.elotec.users.feature.list
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.elotec.users.domain.model.User
 import com.elotec.users.domain.usecase.GetRemotePaginatedUsersUseCase
 import com.elotec.users.domain.usecase.GetRemoteUserListUseCase
 import com.elotec.users.domain.usecase.UserListUseCase
@@ -18,8 +19,13 @@ class UsersListViewModel @Inject constructor(
     val uiState: UsersListUiState,
     val uiEvent: UsersListUiEvent,
 ) : ViewModel() {
+
+    @VisibleForTesting
+    var flowData = UsersViewModel.FlowData()
     private var page: Int = 1
+
     fun setup(flowData: UsersViewModel.FlowData) {
+        this.flowData = flowData
         getUserList()
     }
 
@@ -27,17 +33,18 @@ class UsersListViewModel @Inject constructor(
         action.fold(
             errorButtonAction = { getUserList() },
             errorCloseButtonAction = ::finish,
-            goToUserDetailAction = {},
             paginateAction = { loadMoreUsers(currentPage = page) },
             refreshAction = { realoadUserList() },
             errorPaginating = { loadMoreUsers(currentPage = page) },
             onSearchTextChangedAction = uiState::search,
-            onToastDismissedAction = uiState::dismissToast
+            onToastDismissedAction = uiState::dismissToast,
+            onUserClicked = ::navigateToUserDetails
         )
 
     @VisibleForTesting
     fun realoadUserList() {
         viewModelScope.launch {
+            page = 1
             uiState.onRefreshing(isRefreshing = true)
             userListUseCase.execute().fold(
                 onSuccess = { userList ->
@@ -70,7 +77,7 @@ class UsersListViewModel @Inject constructor(
                 onSuccess = { userList ->
                     if (userList.isNotEmpty()) {
                         page++
-                        uiState.showScreen(userList = userList)
+                        uiState.appendUsers(userList = userList)
                     } else {
                         uiState.onPaginating(isPaginating = false)
                     }
@@ -80,6 +87,10 @@ class UsersListViewModel @Inject constructor(
                 }
             )
         }
+    }
+
+    private fun navigateToUserDetails(user: User) {
+        uiEvent.send(event = UsersListUiEvent.Event.NavigateToUserDetail(user = user))
     }
 
     private fun finish() {

@@ -14,7 +14,7 @@ class UsersViewModelFactory @Inject constructor(
 ) : SavedStateViewModelAssistedFactory<UsersViewModel> {
     override fun create(handle: SavedStateHandle) =
         UsersViewModel(
-            handle = FlowDataSavedStateHandle(handle = handle, key =    SAVED_STATE_KEY),
+            handle = FlowDataSavedStateHandle(handle = handle, key = SAVED_STATE_KEY),
             uiEvent = navigationEvent,
         )
 }
@@ -26,6 +26,13 @@ class UsersViewModel @Inject constructor(
     var flowData = FlowData()
 
     fun setup() {
+        flowData = handle.init(default = flowData)
+        handle.save(flowData = flowData)
+    }
+
+    fun saveUser(user: User) {
+        flowData.user = user
+        handle.save(flowData = flowData)
     }
 
     fun startDestination(): UsersUiEvent.Navigation =
@@ -36,7 +43,7 @@ class UsersViewModel @Inject constructor(
     }
 
     data class FlowData(
-        var users: MutableList<User> = mutableListOf()
+        var user: User = User()
     ) : BaseFlowData {
         companion object {
             const val SAVED_STATE_KEY = "[User.FlowData.SavedState]"

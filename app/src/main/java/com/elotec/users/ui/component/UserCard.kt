@@ -16,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.elotec.users.R
 import com.elotec.users.domain.model.LabelValueData
+import com.elotec.users.domain.model.User
 import com.elotec.users.ui.color.Neutral100
 import com.elotec.users.ui.color.Neutral69
 import com.elotec.users.ui.dimen.Size
@@ -28,11 +29,13 @@ fun UserCard(
     nameInfo: LabelValueData,
     cityInfo: LabelValueData,
     emailInfo: LabelValueData,
+    onCardClick: () -> Unit = {},
 ) {
     Card(
         shape = RoundedCornerShape(Size.Micro),
         colors = CardDefaults.cardColors(containerColor = Neutral100),
-        elevation = CardDefaults.cardElevation(defaultElevation = Size.nPico)
+        elevation = CardDefaults.cardElevation(defaultElevation = Size.nPico),
+        onClick = onCardClick
     ) {
         Column(
             modifier = modifier
@@ -101,7 +104,7 @@ private fun Preview() {
         modifier = Modifier,
         nameInfo = LabelValueData(
             label = "Nome",
-            value = "Erick"
+            value = "Erick",
         ),
         cityInfo = LabelValueData(
             label = "Cidade",
@@ -110,6 +113,7 @@ private fun Preview() {
         emailInfo = LabelValueData(
             label = "Email",
             value = "erick@gmail.com"
-        )
+        ),
+        onCardClick = {}
     )
 }
