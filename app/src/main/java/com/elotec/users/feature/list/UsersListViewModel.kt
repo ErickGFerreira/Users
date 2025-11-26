@@ -34,7 +34,7 @@ class UsersListViewModel @Inject constructor(
             errorButtonAction = { getUserList() },
             errorCloseButtonAction = ::finish,
             paginateAction = { loadMoreUsers(currentPage = page) },
-            refreshAction = { realoadUserList() },
+            refreshAction = { reloadaUserList() },
             errorPaginating = { loadMoreUsers(currentPage = page) },
             onSearchTextChangedAction = uiState::search,
             onToastDismissedAction = uiState::dismissToast,
@@ -42,7 +42,7 @@ class UsersListViewModel @Inject constructor(
         )
 
     @VisibleForTesting
-    fun realoadUserList() {
+    fun reloadaUserList() {
         viewModelScope.launch {
             page = 1
             uiState.onRefreshing(isRefreshing = true)

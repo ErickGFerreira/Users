@@ -129,7 +129,6 @@ private fun ScreenContent(
         contentPadding = PaddingValues(all = Spacing.SM),
         verticalArrangement = Arrangement.spacedBy(Spacing.SM)
     ) {
-        // Informações Pessoais
         item {
             DetailSection(
                 title = stringResource(R.string.personal_info),
@@ -158,7 +157,6 @@ private fun ScreenContent(
             )
         }
 
-        // Endereço
         item {
             DetailSection(
                 title = stringResource(R.string.address_info),
@@ -191,7 +189,6 @@ private fun ScreenContent(
             )
         }
 
-        // Empresa
         item {
             DetailSection(
                 title = stringResource(R.string.company_info),
