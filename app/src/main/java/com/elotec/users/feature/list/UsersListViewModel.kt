@@ -4,7 +4,6 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.elotec.users.domain.model.User
-import com.elotec.users.domain.usecase.GetRemotePaginatedUsersUseCase
 import com.elotec.users.domain.usecase.UsersListUseCase
 import com.elotec.users.feature.UsersViewModel
 import com.elotec.users.utils.safe.fold
@@ -14,13 +13,13 @@ import javax.inject.Inject
 
 class UsersListViewModel @Inject constructor(
     private val userListUseCase: UsersListUseCase,
-    private val getRemotePaginatedUsersUseCase: GetRemotePaginatedUsersUseCase,
     val uiState: UsersListUiState,
     val uiEvent: UsersListUiEvent,
 ) : ViewModel() {
 
     @VisibleForTesting
     var flowData = UsersViewModel.FlowData()
+
     @VisibleForTesting
     internal var page: Int = 1
 
@@ -73,7 +72,7 @@ class UsersListViewModel @Inject constructor(
         viewModelScope.launch {
             uiState.dismissToast()
             uiState.onPaginating(isPaginating = true)
-            getRemotePaginatedUsersUseCase.execute(page = currentPage).fold(
+            userListUseCase.execute(currentPage = currentPage).fold(
                 onSuccess = { userList ->
                     if (userList.isNotEmpty()) {
                         page++

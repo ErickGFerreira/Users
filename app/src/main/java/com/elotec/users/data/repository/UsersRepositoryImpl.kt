@@ -17,22 +17,12 @@ class UsersRepositoryImpl @Inject constructor(
         api.getUserList(currentPage).map { user ->
             user.toDomain()
         }
-
-    override suspend fun getUserListPaginated(page: Int): List<User> =
-        api.getUserList(page).map { user ->
-            user.toDomain()
-        }
-
     override suspend fun getUsersFromCache(): List<User> =
         userDao.getAllUsers().map { user ->
             user.toDomain()
         }
 
     override suspend fun saveUsersToCache(users: List<User>) {
-        userDao.insertUsers(users = users.map { user -> user.toEntity() })
-    }
-
-    override suspend fun appendUsersToCache(users: List<User>) {
         userDao.insertUsers(users = users.map { user -> user.toEntity() })
     }
 }

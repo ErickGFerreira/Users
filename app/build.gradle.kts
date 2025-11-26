@@ -84,6 +84,7 @@ dependencies {
     api(libs.network.retrofit)
     api(libs.network.okhttp.logging)
     implementation(libs.mockk)
+    androidTestImplementation(libs.mockk.android)
     implementation(libs.assertj)
     implementation(libs.coroutest)
     implementation(libs.androidx.room.runtime)

@@ -33,8 +33,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
@@ -97,7 +100,7 @@ private fun EventConsumer(
 }
 
 @Composable
-private fun Screen(
+internal fun Screen(
     onActionEvent: (UsersListScreenAction) -> Unit,
     uiState: UsersListUiState,
 ) {
@@ -125,7 +128,8 @@ private fun ScreenProgress() {
     Column(
         modifier =
             Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .testTag("progress_indicator"),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -150,7 +154,9 @@ private fun ScreenContent(
         TextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .windowInsetsPadding(WindowInsets.statusBars),
+                .windowInsetsPadding(WindowInsets.statusBars)
+                .testTag("search_field")
+                .semantics { contentDescription = "search_field" },
             value = query,
             onValueChange = {
                 onActionEvent(UsersListScreenAction.OnSearchTextChangedAction(text = it))
@@ -171,7 +177,9 @@ private fun ScreenContent(
         PullToRefreshBox(
             isRefreshing = presentation.isRefreshing,
             onRefresh = { onActionEvent(UsersListScreenAction.RefreshAction) },
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .testTag("pull_to_refresh")
         ) {
             Box(
                 modifier = Modifier
@@ -222,12 +230,15 @@ private fun TrackingCardList(
     if (presentation.users.isEmpty() && query.isNotEmpty()) {
         EmptyScreen(message = stringResource(R.string.empty_list))
     } else if (presentation.isPaginating) {
-        CircularProgressIndicator()
+        CircularProgressIndicator(
+            modifier = Modifier.testTag("refresh_indicator")
+        )
     }
 
     LazyColumn(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .testTag("users_list"),
         horizontalAlignment = Alignment.CenterHorizontally,
         state = lazyListState,
         contentPadding = PaddingValues(all = 12.dp)

@@ -2,7 +2,6 @@ package com.elotec.users.inject
 
 import com.elotec.users.domain.repository.UsersRepository
 import com.elotec.users.domain.usecase.GetLocalUsersListUseCase
-import com.elotec.users.domain.usecase.GetRemotePaginatedUsersUseCase
 import com.elotec.users.domain.usecase.GetRemoteUserListUseCase
 import com.elotec.users.domain.usecase.SaveUserListUseCase
 import com.elotec.users.domain.usecase.UsersListUseCase
@@ -21,14 +20,6 @@ class UseCaseModule {
         GetRemoteUserListUseCase { currentPage ->
             safeRunDispatcher {
                 repository.getUserList(currentPage = currentPage)
-            }
-        }
-
-    @Provides
-    fun provideGetRemotePaginatedUsersUseCase(repository: UsersRepository) =
-        GetRemotePaginatedUsersUseCase { page ->
-            safeRunDispatcher {
-                repository.getUserListPaginated(page = page)
             }
         }
 

@@ -2,7 +2,6 @@ package com.elotec.users.feature.list
 
 import com.elotec.users.common.test.CoroutinesTestRule
 import com.elotec.users.domain.model.User
-import com.elotec.users.domain.usecase.GetRemotePaginatedUsersUseCase
 import com.elotec.users.domain.usecase.UsersListUseCase
 import com.elotec.users.feature.UsersViewModel
 import com.elotec.users.feature.list.UsersListScreenAction.ErrorButtonAction
@@ -34,10 +33,6 @@ class UsersListViewModelTest {
 
     private val usersListUseCase: UsersListUseCase =
         mockk(relaxed = true)
-
-    private val getRemotePaginatedUsersUseCase: GetRemotePaginatedUsersUseCase =
-        mockk(relaxed = true)
-
     private val uiState: UsersListUiState = mockk(relaxed = true)
 
     private val uiEvent: UsersListUiEvent = mockk(relaxed = true)
@@ -49,7 +44,6 @@ class UsersListViewModelTest {
         viewModel =
             UsersListViewModel(
                 userListUseCase = usersListUseCase,
-                getRemotePaginatedUsersUseCase = getRemotePaginatedUsersUseCase,
                 uiState = uiState,
                 uiEvent = uiEvent,
             )
@@ -102,7 +96,7 @@ class UsersListViewModelTest {
             val page = 1
             // Given
             coEvery {
-                getRemotePaginatedUsersUseCase.execute(any())
+                usersListUseCase.execute(any())
             } returns Result.Success(data = USER_LIST)
 
             // When
@@ -113,7 +107,7 @@ class UsersListViewModelTest {
             coVerifyOrder {
                 uiState.dismissToast()
                 uiState.onPaginating(isPaginating = true)
-                getRemotePaginatedUsersUseCase.execute(page)
+                usersListUseCase.execute(page)
                 uiState.appendUsers(userList = USER_LIST)
             }
         }
@@ -124,7 +118,7 @@ class UsersListViewModelTest {
             val page = viewModel.page
             // Given
             coEvery {
-                getRemotePaginatedUsersUseCase.execute(any())
+                usersListUseCase.execute(any())
             } returns Result.Success(data = emptyList())
 
             // When
@@ -135,7 +129,7 @@ class UsersListViewModelTest {
             coVerifyOrder {
                 uiState.dismissToast()
                 uiState.onPaginating(isPaginating = true)
-                getRemotePaginatedUsersUseCase.execute(page)
+                usersListUseCase.execute(page)
                 uiState.onPaginating(isPaginating = false)
             }
         }
@@ -145,7 +139,7 @@ class UsersListViewModelTest {
         coroutinesTestRule.runTest {
             // Given
             coEvery {
-                getRemotePaginatedUsersUseCase.execute(any())
+                usersListUseCase.execute(any())
             } returns Result.Failure(error = ERROR_MOCK)
 
             // When
@@ -156,7 +150,7 @@ class UsersListViewModelTest {
             coVerifyOrder {
                 uiState.dismissToast()
                 uiState.onPaginating(isPaginating = true)
-                getRemotePaginatedUsersUseCase.execute(page)
+                usersListUseCase.execute(PAGE)
                 uiState.showToastError(error = ERROR_MOCK)
             }
         }
@@ -193,7 +187,7 @@ class UsersListViewModelTest {
 
             // Then
             coVerifyOrder {
-                getRemotePaginatedUsersUseCase.execute(page = any())
+                usersListUseCase.execute(currentPage = any())
             }
         }
 
@@ -217,7 +211,7 @@ class UsersListViewModelTest {
 
             // Then
             coVerifyOrder {
-                getRemotePaginatedUsersUseCase.execute(page = any())
+                usersListUseCase.execute(currentPage = any())
             }
         }
 
@@ -265,7 +259,7 @@ class UsersListViewModelTest {
 
         val USER = User.mockUser()
         const val SEARCH_TEXT = "TEXT"
-        const val page = 1
+        const val PAGE = 1
         val ERROR_MOCK = ErrorHandler.connectivityError
         val FLOW_DATA =
             UsersViewModel.FlowData(

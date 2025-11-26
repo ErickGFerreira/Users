@@ -25,6 +25,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -82,7 +83,7 @@ private fun EventConsumer(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun Screen(
+internal fun Screen(
     onActionEvent: (UserDetailScreenAction) -> Unit,
     uiState: UserDetailUiState,
 ) {
@@ -100,7 +101,10 @@ private fun Screen(
                 )
             },
             navigationIcon = {
-                IconButton(onClick = { onActionEvent(UserDetailScreenAction.BackButtonAction) }) {
+                IconButton(
+                    onClick = { onActionEvent(UserDetailScreenAction.BackButtonAction) },
+                    modifier = Modifier.testTag("back_button")
+                ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = stringResource(R.string.back_button)
@@ -125,12 +129,15 @@ private fun ScreenContent(
     val presentation by uiState.presentation.collectAsStateWithLifecycle()
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .testTag("detail_content"),
         contentPadding = PaddingValues(all = Spacing.SM),
         verticalArrangement = Arrangement.spacedBy(Spacing.SM)
     ) {
         item {
             DetailSection(
+                tag = "personal_info_card",
                 title = stringResource(R.string.personal_info),
                 items = listOf(
                     LabelValueData(
@@ -159,6 +166,7 @@ private fun ScreenContent(
 
         item {
             DetailSection(
+                tag = "address_info_card",
                 title = stringResource(R.string.address_info),
                 items = listOf(
                     LabelValueData(
@@ -191,11 +199,12 @@ private fun ScreenContent(
 
         item {
             DetailSection(
+                tag = "company_info_card",
                 title = stringResource(R.string.company_info),
                 items = listOf(
                     LabelValueData(
                         label = stringResource(R.string.company_name),
-                        value = presentation.name
+                        value = presentation.companyName
                     ),
                     LabelValueData(
                         label = stringResource(R.string.company_catchphrase),
@@ -213,6 +222,7 @@ private fun ScreenContent(
 
 @Composable
 private fun DetailSection(
+    tag: String,
     title: String,
     items: List<LabelValueData>
 ) {
@@ -220,7 +230,9 @@ private fun DetailSection(
         shape = RoundedCornerShape(Size.Micro),
         colors = CardDefaults.cardColors(containerColor = Neutral100),
         elevation = CardDefaults.cardElevation(defaultElevation = Size.Pico),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .testTag(tag)
     ) {
         Column(
             modifier = Modifier.padding(all = Spacing.SM)

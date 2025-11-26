@@ -6,6 +6,7 @@
     <string name="user_city">Cidade</string>
     <string name="serach_placeholder">Procure por nome ou email</string>
     <string name="try_again">Repetir</string>
+    <string name="exit"> Sair</string>
     <string name="empty_list">Não há resultados para essa busca\n</string>
 
     <!-- User Detail Strings -->

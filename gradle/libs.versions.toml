@@ -56,6 +56,7 @@ network-okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-inter
 network-gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 network-gson-converter = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
 assertj = { group = "org.assertj", name = "assertj-core", version.ref = "assertj" }
 coroutest = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutinesCore" }
 compose-material3 = { group = "androidx.wear.compose", name = "compose-material3", version.ref = "composeMaterial3" }
