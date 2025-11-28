@@ -26,8 +26,7 @@ class UsersActivity : BaseComposeActivity<UsersViewModel>() {
 
     override fun createFlowViewModelFactory(): ViewModelProvider.Factory =
         SavedStateViewModelFactory(
-            viewModelFactory = usersViewModelFactory,
-            owner = this,
+            viewModelFactory = usersViewModelFactory
         )
 
     override fun onCreate(savedInstanceState: Bundle?) {

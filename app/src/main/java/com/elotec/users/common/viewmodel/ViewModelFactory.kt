@@ -1,14 +1,13 @@
 package com.elotec.users.common.viewmodel
 
-import android.os.Bundle
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.createSavedStateHandle
+import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import androidx.savedstate.SavedStateRegistryOwner
 import dagger.MapKey
 import javax.inject.Inject
 import javax.inject.Provider
@@ -22,18 +21,17 @@ class ViewModelFactory @Inject constructor(
 }
 
 class SavedStateViewModelFactory<out VM : ViewModel>(
-    private val viewModelFactory: SavedStateViewModelAssistedFactory<VM>,
-    owner: SavedStateRegistryOwner,
-    defaultArgs: Bundle? = null
-) : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
-
+    private val viewModelFactory: SavedStateViewModelAssistedFactory<VM>
+) : ViewModelProvider.Factory {
+//
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(
-        key: String,
         modelClass: Class<T>,
-        handle: SavedStateHandle
-    ): T = viewModelFactory.create(handle) as T
-
+        extras: CreationExtras
+    ): T {
+        val savedStateHandle = extras.createSavedStateHandle()
+        return viewModelFactory.create(savedStateHandle) as T
+    }
 }
 
 interface SavedStateViewModelAssistedFactory<VM : ViewModel> {
