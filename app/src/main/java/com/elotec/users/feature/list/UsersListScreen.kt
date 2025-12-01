@@ -212,7 +212,7 @@ private fun TrackingCardList(
 ) {
     val lazyListState = rememberLazyListState()
 
-    val shouldPaginate = remember {
+    val shouldPaginate by remember {
         derivedStateOf {
             val totalItems = lazyListState.layoutInfo.totalItemsCount
             val lastVisibleItemIndex =
@@ -222,9 +222,9 @@ private fun TrackingCardList(
     }
 
     LaunchedEffect(key1 = lazyListState, key2 = query) {
-        snapshotFlow { shouldPaginate.value }
+        snapshotFlow { shouldPaginate }
             .distinctUntilChanged()
-            .filter { it && query.isEmpty() }
+            .filter { it && query.isEmpty()}
             .collect { onActionEvent(PaginateAction) }
     }
     if (presentation.users.isEmpty() && query.isNotEmpty()) {
